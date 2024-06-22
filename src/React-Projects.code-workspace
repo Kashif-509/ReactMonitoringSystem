@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../Kashif-509-transitions-lp-main"
+		},
+		{
+			"path": "../../../../Kashif-509-create-employee-page-lp-main"
+		},
+		{
+			"path": "../../../../Kashif-509-create-an-http-api-lp-main"
+		},
+		{
+			"path": "../../../../bestInsuranceApi 2"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "React-Projects",
+		"java.compile.nullAnalysis.mode": "automatic"
+	}
+}
