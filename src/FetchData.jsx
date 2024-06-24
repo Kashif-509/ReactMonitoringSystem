@@ -34,6 +34,7 @@ const FetchData = () => {
   const [data59, setData59] = useState(null);
   const [data61, setData61] = useState(null);
   const [data67, setData67] = useState(null);
+  const [newData, setNewData] = useState(null); // New state for additional endpoint data
   const [entryCount, setEntryCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -62,6 +63,14 @@ const FetchData = () => {
         setData59(responseData.field_data["59"]);
         setData61(responseData.field_data["61"]);
         setData67(responseData.field_data["67"]);
+
+        // Fetch additional data from the new endpoint
+        const newResponse = await axios.get(
+          "https://expressbackend-kvby.onrender.com/api/mineral-revenues/2000"
+        );
+        console.log("New Data Response:", newResponse.data.result);
+        setNewData(newResponse.data.result);
+
         setLoading(false);
 
         // Animate headings
@@ -139,10 +148,26 @@ const FetchData = () => {
     ],
   });
 
+  const createNewChartData = (data, field) => {
+    if (!data) return { labels: [], datasets: [] };
+    return {
+      labels: data.map((entry) => entry.district),
+      datasets: [
+        {
+          label: field,
+          data: data.map((entry) => entry[field]),
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1 ref={headingRef}>Mines & Minerals Monitoring System</h1>
-      <h2 ref={subHeadingRef}> Total Number of Cases : {entryCount}</h2>
+      <h2 ref={subHeadingRef}>Total Number of Cases: {entryCount}</h2>
       <h3>Field Data:</h3>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         <div style={{ flex: "1 1 45%", height: "400px" }}>
@@ -205,6 +230,60 @@ const FetchData = () => {
         <div style={{ flex: "1 1 45%", height: "400px" }}>
           <Doughnut data={createChartData(data67)} options={options} />
         </div>
+
+        {/* New Charts for the additional data */}
+        {newData && (
+          <>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Bar
+                data={createNewChartData(newData, "Limestone")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Pie
+                data={createNewChartData(newData, "Limestone")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Line
+                data={createNewChartData(newData, "Limestone")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Doughnut
+                data={createNewChartData(newData, "Limestone")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Bar
+                data={createNewChartData(newData, "Coal")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Pie
+                data={createNewChartData(newData, "Coal")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Line
+                data={createNewChartData(newData, "Coal")}
+                options={options}
+              />
+            </div>
+            <div style={{ flex: "1 1 45%", height: "400px" }}>
+              <Doughnut
+                data={createNewChartData(newData, "Coal")}
+                options={options}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
